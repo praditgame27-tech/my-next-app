@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
   // อนาคตจะเพิ่มเมนูอื่น เช่น Products, Contact ตรงนี้ได้เลย
 ];
 
