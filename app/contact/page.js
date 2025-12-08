@@ -21,12 +21,31 @@ export default function ContactPage() {
     }));
   };
 
-  // ฟังก์ชันนี้จะรันเมื่อกดส่งฟอร์ม
-  const handleSubmit = (e) => {
-    e.preventDefault(); // ป้องกันเว็บรีเฟรช
-    console.log("Form Submitted:", formData);
-    alert("ข้อมูลถูกส่งเรียบร้อย! (ยังไม่เก็บลงฐานข้อมูล)");
-  };
+  
+// ฟังก์ชันนี้จะรันเมื่อกดส่งฟอร์ม
+  const handleSubmit = async (e) => {
+  e.preventDefault();// ป้องกันเว็บรีเฟรช
+
+  try {
+    // ส่งข้อมูลไป API ของเรา
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await res.json();
+    console.log("Server Response:", result);
+
+    alert("ข้อมูลถูกส่งไปยัง Server แล้ว!");
+  } catch (error) {
+    console.error(error);
+    alert("ส่งข้อมูลไม่สำเร็จ");
+  }
+};
+
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-8 bg-gray-50">
