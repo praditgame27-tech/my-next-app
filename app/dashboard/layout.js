@@ -1,12 +1,26 @@
-// app/dashboard/layout.js
+"use client";
 
 export default function DashboardLayout({ children }) {
   return (
-    <main className="min-h-screen bg-gray-100">
-      <div className="mx-auto max-w-5xl py-8">
-        <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
-        {children}
-      </div>
-    </main>
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar / Header */}
+      <header className="bg-white shadow px-6 py-3 flex justify-between items-center">
+        <h1 className="font-semibold text-lg">Admin Dashboard</h1>
+
+        {/* 🔴 Logout Button */}
+        <button
+          onClick={async () => {
+            await fetch("/api/auth/logout", { method: "POST" });
+            window.location.href = "/login";
+          }}
+          className="text-sm text-red-600 hover:underline"
+        >
+          Logout
+        </button>
+      </header>
+
+      {/* Page content */}
+      <main className="p-6">{children}</main>
+    </div>
   );
 }
