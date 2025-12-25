@@ -27,6 +27,7 @@ export default function ContactPage() {
   }, [q, sort, page]);
 
   // ฟังก์ชันดึงข้อมูลจาก API
+  const [role, setRole] = useState("guest");
   const fetchData = async () => {
     const res = await fetch(
       `/api/contact?q=${q}&sort=${sort}&page=${page}&limit=5`
@@ -37,6 +38,7 @@ export default function ContactPage() {
     // อัปเดต state
     setContacts(result.data);
     setTotalPages(result.totalPages);
+    setRole(result.role);
   };
 
   return (
@@ -111,21 +113,20 @@ export default function ContactPage() {
 
               {/* 🗑️ Delete */}
               <td>
+
+                {role === "admin" && (
                 <button
                   onClick={async () => {
                     if (!confirm("Delete this contact?")) return;
-
-                    await fetch(`/api/contact/${item._id}`, {
-                      method: "DELETE",
-                    });
-
-                    // 🔄 ดึงข้อมูลใหม่หลังลบ
+                    await fetch(`/api/contact/${item._id}`, { method: "DELETE" });
                     fetchData();
                   }}
                   className="text-xs text-red-600 underline"
                 >
                   Delete
                 </button>
+              )}
+
               </td>
             </tr>
           ))}

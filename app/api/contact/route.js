@@ -1,6 +1,7 @@
 // app/api/contact/route.js
 // POST เก็บข้อมูลเหมือนเดิม (ไม่ต้องแตะ)
 import clientPromise from "@/lib/mongodb";
+import { cookies } from "next/headers";
 
 export async function POST(request) {
   try {
@@ -77,6 +78,11 @@ export async function POST(request) {
 //   }
 // }
 export async function GET(req) {
+
+  // อ่าน role จาก cookie
+  const auth = cookies().get("auth")?.value;
+  const role = auth ? JSON.parse(auth).role : "guest";
+
   const { searchParams } = new URL(req.url);
 
   const q = searchParams.get("q") || "";
@@ -111,11 +117,20 @@ export async function GET(req) {
     .limit(limit)
     .toArray();
 
+  // return Response.json({
+  //   success: true,
+  //   data,
+  //   total,
+  //   page,
+  //   totalPages: Math.ceil(total / limit),
+  // });
+
   return Response.json({
     success: true,
     data,
     total,
     page,
     totalPages: Math.ceil(total / limit),
+    role, // 👈 ส่ง role ไปให้ client ใช้ซ่อนปุ่ม
   });
 }
